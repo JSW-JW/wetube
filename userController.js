@@ -118,10 +118,10 @@ export const userDetail = async (req, res) => {
     params: { id },
   } = req;
   try {
-    const user = User.findById(id);
-    res.render("userDetail", { pageTitle: "UserDetail" }, user);
+    const user = await User.findById(id);
+    res.render("userDetail", { user: user });
   } catch (error) {
-    res.redirect(routes.home);
+    console.log(error);
   }
 };
 export const getEditProfile = (req, res) =>
