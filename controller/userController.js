@@ -164,3 +164,5 @@ export const postChangePassword = async (req, res) => {
     res.redirect(`/users${routes.changePassword}`);
   }
 };
+
+export const subslist = async () => {};

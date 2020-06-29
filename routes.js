@@ -4,6 +4,7 @@ const JOIN = "/join";
 const LOGIN = "/login";
 const LOGOUT = "/logout";
 const SEARCH = "/search";
+const SUBSLIST = "/subslist";
 
 // Users
 
@@ -86,6 +87,7 @@ const routes = {
   registerView: REGISTER_VIEW,
   addComment: ADD_COMMENT,
   subscribe: SUBSCRIBE,
+  subslist: SUBSLIST,
 };
 
 export default routes;

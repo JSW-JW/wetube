@@ -1,4 +1,4 @@
-div.left__quickbar
+.left-quickbar
     .quick-icons
         span
             i.fas.fa-home Home
@@ -6,3 +6,5 @@ div.left__quickbar
             i.far.fa-bookmark Subscribe
         span    
             i.fas.fa-box-open Saved Video
+    .subscribe__list
+        p=JSON.stringify(usersubs.subscribers.fileUrl)

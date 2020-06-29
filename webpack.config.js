@@ -48,9 +48,3 @@ const config = {
 };
 
 module.exports = config;
-module.exports = {
-  node: {
-    fs: "empty",
-    tls: "empty",
-  },
-};

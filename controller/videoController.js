@@ -6,7 +6,9 @@ import User from "../models/User";
 export const home = async (req, res) => {
   try {
     const videos = await Video.find({}).sort({ _id: -1 });
-    res.render("home", { pageTitle: "Home", videos });
+    const usersubs = await User.findById(req.user.id).populate("subscribers");
+    console.log(usersubs.subscribers.fileUrl);
+    res.render("home", { pageTitle: "Home", videos, usersubs });
   } catch (error) {
     console.log(error);
     res.render("home", { pageTitle: "Home", videos: [] });
@@ -55,8 +57,7 @@ export const videoDetail = async (req, res) => {
     const video = await Video.findById(id)
       .populate("creator")
       .populate("comments");
-    const usersubs = await User.findById(req.user.id).populate("subscribers");
-    res.render("videoDetail", { pageTitle: video.title, video, usersubs });
+    res.render("videoDetail", { pageTitle: video.title, video });
   } catch (error) {
     res.redirect(routes.home);
   }
