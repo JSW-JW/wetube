@@ -6,9 +6,14 @@ import User from "../models/User";
 export const home = async (req, res) => {
   try {
     const videos = await Video.find({}).sort({ _id: -1 });
-    const usersubs = await User.findById(req.user.id).populate("subscribers");
-    console.log(usersubs.subscribers.fileUrl);
-    res.render("home", { pageTitle: "Home", videos, usersubs });
+    if (req.user) {
+      const user = await User.findById(req.user.id).populate(
+        "subscribedYoutubers"
+      );
+      res.render("home", { pageTitle: "Home", videos, user });
+    } else {
+      res.render("home", { pageTitle: "Home", videos });
+    }
   } catch (error) {
     console.log(error);
     res.render("home", { pageTitle: "Home", videos: [] });
@@ -27,7 +32,14 @@ export const search = async (req, res) => {
   } catch (error) {
     console.log(error);
   }
-  res.render("search", { pageTitle: "Search", searchingBy, videos });
+  if (req.user) {
+    const user = await User.findById(req.user.id).populate(
+      "subscribedYoutubers"
+    );
+    res.render("search", { pageTitle: "Search", searchingBy, videos, user });
+  } else {
+    res.render("search", { pageTitle: "Search", searchingBy, videos });
+  }
 };
 
 export const getUpload = (req, res) =>
@@ -36,10 +48,10 @@ export const getUpload = (req, res) =>
 export const postUpload = async (req, res) => {
   const {
     body: { title, description },
-    file: { path },
+    file: { location },
   } = req;
   const newVideo = await Video.create({
-    fileUrl: path,
+    fileUrl: location,
     title,
     description,
     creator: req.user.id,
@@ -53,11 +65,28 @@ export const videoDetail = async (req, res) => {
   const {
     params: { id },
   } = req;
+
   try {
     const video = await Video.findById(id)
       .populate("creator")
       .populate("comments");
-    res.render("videoDetail", { pageTitle: video.title, video });
+    if (req.user) {
+      const user = await User.findById(req.user.id).populate(
+        "subscribedYoutubers"
+      );
+      const kimchi = user.subscribedYoutubers.forEach((subscribedYoutuber) => {
+        if (subscribedYoutuber == video.creator) {
+          return subscribedYoutuber;
+        }
+      });
+      res.render("videoDetail", {
+        pageTitle: video.title,
+        video,
+        kimchi,
+      });
+    } else {
+      res.render("videoDetail", { pageTitle: video.title, video });
+    }
   } catch (error) {
     res.redirect(routes.home);
   }
@@ -150,12 +179,34 @@ export const subscribe = async (req, res) => {
     params: { id },
   } = req;
   try {
-    const subsVideo = await Video.findById(id);
+    const video = await Video.findById(id);
     const user = await User.findById(req.user.id);
-    await user.subscribers.push(subsVideo.id);
+    await user.subscribedYoutubers.push(video.creator);
+    await user.subscribedVideos.push(video);
     await user.save();
   } catch (error) {
     console.log(error);
+    res.status(400);
+  } finally {
+    res.end();
+  }
+};
+
+// Delete Comment
+
+export const deleteComment = async (req, res) => {
+  const {
+    params: { id },
+    body: { content },
+  } = req;
+  try {
+    const video = await Video.findById(id);
+    const deleteComment = await Comment.findOneAndDelete({
+      text: content,
+    });
+    video.comments.pull(deleteComment._id);
+    video.save();
+  } catch (error) {
     res.status(400);
   } finally {
     res.end();

@@ -19,7 +19,13 @@ const UserSchema = new mongoose.Schema({
       ref: "Video",
     },
   ],
-  subscribers: [
+  subscribedYoutubers: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
+  subscribedVideos: [
     {
       type: mongoose.Schema.Types.ObjectId,
       ref: "Video",

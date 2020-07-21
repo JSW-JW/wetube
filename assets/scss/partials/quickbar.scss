@@ -1,4 +1,31 @@
-.left-quickbar {
-  display: flex;
-  flex-direction: column;
+.left-quickbar__container {
+  .quick__flexContainer {
+    padding: 25px 0px 0px 17px;
+    left: 0px;
+    top: 50px;
+    background-color: #f9f9f9;
+    position: fixed;
+    width: 240px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    .quick-icons {
+      height: 35px;
+      font-size: 20px;
+      font-weight: 50;
+      i {
+        padding-right: 20px;
+      }
+    }
+    a {
+      width: 50px;
+      height: 50px;
+      text-decoration: none;
+      img {
+        width: 50px;
+        height: 50px;
+        border-radius: 20px;
+      }
+    }
+  }
 }

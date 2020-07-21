@@ -1,5 +1,4 @@
 import routes from "../routes";
-import e from "express";
 import User from "../models/User";
 import passport from "passport";
 
@@ -136,7 +135,7 @@ export const postEditProfile = async (req, res) => {
     await User.findByIdAndUpdate(req.user.id, {
       name,
       email,
-      avatarUrl: file ? file.path : req.user.avatarUrl,
+      avatarUrl: file ? file.location : req.user.avatarUrl,
     });
     res.redirect(routes.me);
   } catch (error) {
@@ -165,4 +164,10 @@ export const postChangePassword = async (req, res) => {
   }
 };
 
-export const subslist = async () => {};
+export const bringLogin = (req, res) => {
+  const {
+    body: { content },
+  } = req;
+  console.log(content);
+  res.render("login");
+};

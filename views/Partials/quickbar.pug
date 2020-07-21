@@ -1,10 +1,18 @@
-.left-quickbar
-    .quick-icons
-        span
-            i.fas.fa-home Home
-        span    
-            i.far.fa-bookmark Subscribe
-        span    
-            i.fas.fa-box-open Saved Video
-    .subscribe__list
-        p=JSON.stringify(usersubs.subscribers.fileUrl)
+.left-quickbar__container
+    .quick__flexContainer
+        a(href=routes.home)
+            div.quick-icons
+                i.fas.fa-home
+                span Home
+        div.quick-icons    
+            i.far.fa-bookmark 
+            span Subscribe
+        div.quick-icons    
+            i.fas.fa-box-open 
+            span Saved Video
+        if(user)
+            each video in user.subscribedYoutubers
+                ul
+                    li=video.name
+                a.SubscribedYoutubers(href=video.avatarUrl)
+                    img(src=video.avatarUrl, alt="")

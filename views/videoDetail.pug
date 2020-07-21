@@ -12,24 +12,61 @@ block content
                     button Edit video
             h5.video__title= video.title
             p.video__description= video.description
-            if video.views === 1
+            if video.views === 0
+                span.video__views 0 view
+            else if video.views === 1
                 span.video__views 1 view
             else
                 span.video__views #{video.views} views
             .video__author
                 |Uploaded by 
                 a(href=routes.userDetail(String(video.creator.id)))=video.creator.name
-            .video__subscribe
-                button.subscribeBtn(name="subscribe")
-                    span SUBSCRIBE
+            .video__subscribe#jsSubscribe
+                if loggedUser
+                    if subscribedYoutuber
+                        button.subscribeBtn.subscribed(name="subscribed")
+                            span SUBSCRIBED
+                    else
+                        button.subscribeBtn(name="subscribe")
+                            span SUBSCRIBE
+                else
+                    a(href=routes.login)
+                        button(name="subscribe")
+                            span SUBSCRIBE
         .video__comments
             if video.comments.length === 1
-                span.video__comment-number 1 comment
+                span.video__comment-number
+                    span#jsCommentNumber 1
+                    |  comment
             else   
-                span.video__comment-number #{video.comments.length} comments
+                span.video__comment-number
+                    span#jsCommentNumber=video.comments.length
+                    |  comments
             form.add__comment#jsAddComment
-                input(type="text",name="comment", placeholder="Add a Comment")
-            ul.video__comments-list
-                each comment in video.comments
-                    span comment.text
-          
+                if (loggedUser)
+                    input(type="text",name="comment", placeholder="Add a Comment")
+                else
+                    a(href=routes.login)
+                        input(type="text",name="comment", placeholder="Log in to comment")
+            ul.video__comments-list#jsCommentList
+                each comment in video.comments.reverse()
+                    if loggedUser && comment.creator == loggedUser.id
+                        .myComment_Container
+                            li.myComment=comment.text
+                                button.SendApi(value=comment.text) ❌
+                    else
+                        li=comment.text
+
+    //- .modal__container#modalContainer
+    //-     .modal-header 
+    //-         div Subscribe Premium
+    //-     .modal-content
+    //-         div.description You can enjoy this user's premium contents with 3$.
+    //-         div Name
+    //-             input(type="text", name="name")
+    //-         div Pin-Number
+    //-             input(type="text", name="pin-number")
+    //-         div E-mail
+    //-             input(type="email", name="email")
+    //-     .modal-footer
+    //-         div footer

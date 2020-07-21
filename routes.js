@@ -38,6 +38,8 @@ const API = "/api";
 const REGISTER_VIEW = "/:id/view";
 const ADD_COMMENT = "/:id/comment";
 const SUBSCRIBE = "/:id/subscribe";
+const DELETE_COMMENT = "/:id/deleteComment";
+const Bring_Login = "/:id/bringLogin";
 
 const routes = {
   home: HOME,
@@ -88,6 +90,8 @@ const routes = {
   addComment: ADD_COMMENT,
   subscribe: SUBSCRIBE,
   subslist: SUBSLIST,
+  deleteComment: DELETE_COMMENT,
+  bringLogin: Bring_Login,
 };
 
 export default routes;

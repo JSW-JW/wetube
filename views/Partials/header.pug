@@ -12,7 +12,7 @@ header.header
                     li
                         a(href=routes.join) Join
                     li
-                        a(href=routes.login) Log In
+                        a.login(href=routes.login) Log In
                 else
                     li
                         a(href=`/videos${routes.upload}`) Upload
@@ -21,8 +21,8 @@ header.header
                     li
                         a(href=routes.logout) Log Out
                     li 
-                       -const str = loggedUser.avatarUrl;
-                       -const sub = str.substr(8);
+                        -const str = loggedUser.avatarUrl;
+                        -const sub = str.substr(8);
                         a.UserAvatar(href=routes.me) 
                             img(src=`http://${sub}`)
 
